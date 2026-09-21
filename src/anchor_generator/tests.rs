@@ -1,4 +1,4 @@
-use crate::anchor_generator::{DpMatrixResultCellIter, OffsetIter};
+use crate::anchor_generator::{OffsetIter, result_cell_iter::DpMatrixResultCellIter};
 
 #[test]
 fn dp_matrix_result_cell_iter_100_100_0_0() {

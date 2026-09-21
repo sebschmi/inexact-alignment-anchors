@@ -1,6 +1,6 @@
 pub trait AlignmentCost<Character, Cost> {
     /// Returns the cost of aligning two characters.
-    fn cost(&self, a: Character, b: Character) -> Cost;
+    fn cost(&self, a: &Character, b: &Character) -> Cost;
 
     /// Returns the cost of opening a gap.
     ///
@@ -20,7 +20,7 @@ pub struct SimpleAlignmentCost {
 }
 
 impl<Character: Eq> AlignmentCost<Character, u32> for SimpleAlignmentCost {
-    fn cost(&self, a: Character, b: Character) -> u32 {
+    fn cost(&self, a: &Character, b: &Character) -> u32 {
         if a == b { 0 } else { self.mismatch_cost }
     }
 
