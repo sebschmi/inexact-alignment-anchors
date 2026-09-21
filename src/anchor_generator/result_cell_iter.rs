@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 pub enum DpMatrixResultCellIter {
     MaxMismatchesIsZero,
     AIsK { b_limit: usize },

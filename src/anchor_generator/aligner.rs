@@ -8,6 +8,9 @@ use crate::{
     anchor_generator::result_cell_iter::DpMatrixResultCellIter, costs::AlignmentCost, error::Error,
 };
 
+#[cfg(test)]
+mod tests;
+
 pub struct InexactAnchorLimitGenerator<
     'context,
     Character: Eq,
@@ -18,6 +21,7 @@ pub struct InexactAnchorLimitGenerator<
     targets: Vec<AnchorLimit<Cost>>,
 }
 
+#[derive(Debug, Clone, Eq, PartialEq, Hash, PartialOrd, Ord)]
 pub struct AnchorLimit<Cost> {
     pub limit_a: usize,
     pub limit_b: usize,
@@ -167,6 +171,17 @@ impl<'context, Character: Eq, Cost: AStarCost, AlignmentCostImpl: AlignmentCost<
 
     pub fn peek(&self) -> Option<&AnchorLimit<Cost>> {
         self.targets.last()
+    }
+}
+
+impl<Cost> AnchorLimit<Cost> {
+    #[cfg(test)]
+    fn new(limit_a: usize, limit_b: usize, cost: Cost) -> Self {
+        Self {
+            limit_a,
+            limit_b,
+            cost,
+        }
     }
 }
 

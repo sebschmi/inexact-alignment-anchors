@@ -1,3 +1,5 @@
+use generic_a_star::cost::U32Cost;
+
 pub trait AlignmentCost<Character, Cost> {
     /// Returns the cost of aligning two characters.
     fn cost(&self, a: &Character, b: &Character) -> Cost;
@@ -14,21 +16,25 @@ pub trait AlignmentCost<Character, Cost> {
 }
 
 pub struct SimpleAlignmentCost {
-    pub mismatch_cost: u32,
-    pub gap_open_cost: u32,
-    pub gap_extend_cost: u32,
+    pub mismatch_cost: U32Cost,
+    pub gap_open_cost: U32Cost,
+    pub gap_extend_cost: U32Cost,
 }
 
-impl<Character: Eq> AlignmentCost<Character, u32> for SimpleAlignmentCost {
-    fn cost(&self, a: &Character, b: &Character) -> u32 {
-        if a == b { 0 } else { self.mismatch_cost }
+impl<Character: Eq> AlignmentCost<Character, U32Cost> for SimpleAlignmentCost {
+    fn cost(&self, a: &Character, b: &Character) -> U32Cost {
+        if a == b {
+            U32Cost::from(0u32)
+        } else {
+            self.mismatch_cost
+        }
     }
 
-    fn gap_open_cost(&self) -> u32 {
+    fn gap_open_cost(&self) -> U32Cost {
         self.gap_open_cost
     }
 
-    fn gap_extend_cost(&self) -> u32 {
+    fn gap_extend_cost(&self) -> U32Cost {
         self.gap_extend_cost
     }
 }

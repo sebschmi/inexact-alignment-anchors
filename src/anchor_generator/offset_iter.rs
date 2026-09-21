@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 pub struct OffsetIter {
     offset_a: usize,
     offset_b: usize,
@@ -35,24 +38,33 @@ impl OffsetIter {
         // One of the sequences must have space for at least k characters.
         if sequence_a_len < self.offset_a + k {
             // Here, a has space for less than k characters, so b must have space for at least k characters.
-            if sequence_b_len < self.offset_b + k {
+            if sequence_b_len < self.offset_b + k + 1 {
                 self.offset_a += 1;
                 self.offset_b = 0;
+                return if sequence_a_len < self.offset_a + k.saturating_sub(max_mismatches) {
+                    None
+                } else {
+                    Some((self.offset_a, self.offset_b))
+                };
             }
         } else {
             // Here, a has space for at least k characters, so b can have less than k characters.
-            if sequence_b_len < self.offset_b + k.saturating_sub(max_mismatches) {
+            if sequence_b_len < self.offset_b + k.saturating_sub(max_mismatches) + 1 {
                 self.offset_a += 1;
                 self.offset_b = 0;
+                return if sequence_a_len < self.offset_a + k.saturating_sub(max_mismatches) {
+                    None
+                } else {
+                    Some((self.offset_a, self.offset_b))
+                };
             }
         }
 
         if sequence_a_len < self.offset_a + k.saturating_sub(max_mismatches) {
             None
         } else {
-            let result = (self.offset_a, self.offset_b);
             self.offset_b += 1;
-            Some(result)
+            Some((self.offset_a, self.offset_b))
         }
     }
 }
