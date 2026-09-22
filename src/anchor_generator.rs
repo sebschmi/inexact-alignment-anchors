@@ -92,9 +92,6 @@ impl<'context, Character: Eq, Cost: AStarCost, AlignmentCostImpl: AlignmentCost<
             cost,
         }) = self.limit_generator.next()
         {
-            println!(
-                "Emitting anchor with offset_a = {offset_a}, offset_b = {offset_b}, len_a = {len_a}, len_b = {len_b}, cost = {cost:?}"
-            );
             Some(Anchor {
                 offset_a,
                 limit_a: offset_a + len_a,
@@ -111,7 +108,6 @@ impl<'context, Character: Eq, Cost: AStarCost, AlignmentCostImpl: AlignmentCost<
                     self.max_mismatches,
                 )?;
 
-                println!("Generating limits with offset_a = {offset_a}, offset_b = {offset_b}");
                 self.limit_generator
                     .reset(offset_a, offset_b, self.sequence_a, self.sequence_b);
             }

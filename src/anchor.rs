@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 /// An alignment anchor.
 ///
 /// The anchor is defined as a pair of two intervals, one for each aligned sequence.
@@ -27,5 +29,15 @@ impl<Cost> Anchor<Cost> {
             limit_b,
             cost,
         }
+    }
+}
+
+impl<Cost: Display> Display for Anchor<Cost> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "A(offset_a = {}, limit_a = {}, offset_b = {}, limit_b = {}, cost = {})",
+            self.offset_a, self.limit_a, self.offset_b, self.limit_b, self.cost,
+        )
     }
 }
