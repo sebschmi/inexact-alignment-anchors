@@ -26,6 +26,8 @@ mod tests;
 /// Specifically, a gap of length `n` counts as `n` mismatches.
 ///
 /// The anchors are deduplicated, and for each possible anchor geometry only an anchor of minimum cost is generated.
+///
+/// This type implements the `Iterator` trait, and generating all anchors is done by exhausting the iterator (calling `next()` until it returns `None`).
 pub struct InexactAlignmentAnchorGenerator<
     'context,
     Character: Eq,
@@ -45,6 +47,21 @@ pub struct InexactAlignmentAnchorGenerator<
 impl<'context, Character: Eq, Cost: AStarCost, AlignmentCostImpl: AlignmentCost<Character, Cost>>
     InexactAlignmentAnchorGenerator<'context, Character, Cost, AlignmentCostImpl>
 {
+    /// Creates a new `InexactAlignmentAnchorGenerator`.
+    ///
+    /// See [`InexactAlignmentAnchorGenerator`] for more details.
+    ///
+    /// # Arguments
+    ///
+    /// * `sequence_a` - The first sequence.
+    /// * `sequence_b` - The second sequence.
+    /// * `costs` - The alignment costs.
+    /// * `k` - The length of an anchor. At least one of the two sides of the anchor must have this length.
+    /// * `max_mismatches` - The maximum number of mismatches allowed in an anchor.
+    ///
+    /// # Returns
+    ///
+    /// A new `InexactAlignmentAnchorGenerator`, or an error if `k` or `max_mismatches` are larger than 255.
     pub fn new(
         sequence_a: &'context [Character],
         sequence_b: &'context [Character],

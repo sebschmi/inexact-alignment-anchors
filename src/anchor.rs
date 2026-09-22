@@ -30,6 +30,16 @@ impl<Cost> Anchor<Cost> {
             cost,
         }
     }
+
+    pub fn shift_right(self, offset_a: usize, offset_b: usize) -> Self {
+        Self {
+            offset_a: self.offset_a + offset_a,
+            limit_a: self.limit_a + offset_a,
+            offset_b: self.offset_b + offset_b,
+            limit_b: self.limit_b + offset_b,
+            cost: self.cost,
+        }
+    }
 }
 
 impl<Cost: Display> Display for Anchor<Cost> {
