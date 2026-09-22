@@ -10,6 +10,8 @@ pub mod anchor;
 pub mod anchor_generator;
 pub mod costs;
 pub mod error;
+#[cfg(test)]
+mod tests;
 
 // Convenience functions.
 
