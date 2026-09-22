@@ -10,4 +10,12 @@ edition = "2024"
 [dependencies]
 thiserror = "2.0.20"
 num-traits = "0.2.19"
-generic_a_star = "7.0.1"
+generic_a_star = "7.0.2"
+
+[dev-dependencies]
+divan = "0.1.21"
+rand = "0.10.3"
+
+[[bench]]
+name = "end-to-end"
+harness = false
