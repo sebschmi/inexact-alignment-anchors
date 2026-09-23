@@ -40,19 +40,6 @@ impl<Cost> Anchor<Cost> {
             cost: self.cost,
         }
     }
-
-    /// Trims leading and trailing matches from the anchor.
-    ///
-    /// If the anchor has at least one mismatch, then all leading and trailing matches are removed.
-    /// If the first and/or last mismatch cannot be placed at a unique position, then all possible combinations are returned.
-    pub fn trim<Character>(
-        &self,
-        sequence_a: &[Character],
-        sequence_b: &[Character],
-    ) -> impl Iterator<Item = Self> {
-        todo!();
-        None.into_iter()
-    }
 }
 
 impl<Cost: Display> Display for Anchor<Cost> {
