@@ -3,7 +3,10 @@ use inexact_alignment_anchors::{
     costs::SimpleAlignmentCost, generate_inexact_alignment_anchors,
     generate_inexact_alignment_anchors_of_subsequences,
 };
-use rand::{rngs::ThreadRng, seq::IndexedRandom};
+use rand::{
+    rngs::ThreadRng,
+    seq::{IndexedRandom, IteratorRandom},
+};
 
 fn main() {
     divan::main()
@@ -75,5 +78,52 @@ fn bench_subsequence(bencher: Bencher, len: usize) {
         )
         .unwrap()
         .collect::<Vec<_>>()
+    });
+}
+
+#[divan::bench(args = [100, 1000])]
+fn bench_full_repetitive(bencher: Bencher, len: usize) {
+    let mut rng = ThreadRng::default();
+    let mut sequence_a: Vec<_> = b"ACGT"
+        .choose_iter(&mut rng)
+        .unwrap()
+        .take(len)
+        .copied()
+        .collect();
+    let mut sequence_b: Vec<_> = b"ACGT"
+        .choose_iter(&mut rng)
+        .unwrap()
+        .take(len)
+        .copied()
+        .collect();
+    for _ in 0..len / 20 {
+        let start = (0..len - 10).choose(&mut rng).unwrap();
+        let end = (start + 3..len.min(start + 10)).choose(&mut rng).unwrap();
+        let c = sequence_a[start];
+        for s in &mut sequence_a[start + 1..end] {
+            *s = c;
+        }
+    }
+    for _ in 0..len / 20 {
+        let start = (0..len - 10).choose(&mut rng).unwrap();
+        let end = (start + 3..len.min(start + 10)).choose(&mut rng).unwrap();
+        let c = sequence_b[start];
+        for s in &mut sequence_b[start + 1..end] {
+            *s = c;
+        }
+    }
+
+    let costs = SimpleAlignmentCost {
+        mismatch_cost: 2u32.into(),
+        gap_open_cost: 3u32.into(),
+        gap_extend_cost: 1u32.into(),
+    };
+    let k = 8;
+    let max_mismatches = 2;
+
+    bencher.counter(len).bench(|| {
+        generate_inexact_alignment_anchors(&sequence_a, &sequence_b, &costs, k, max_mismatches)
+            .unwrap()
+            .collect::<Vec<_>>()
     });
 }
