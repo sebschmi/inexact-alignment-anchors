@@ -162,7 +162,7 @@ dependencies = [
 
 [[package]]
 name = "inexact-alignment-anchors"
-version = "2.0.0"
+version = "2.0.1"
 dependencies = [
  "divan",
  "generic_a_star",
