@@ -26,9 +26,13 @@ impl DpMatrixResultCellIter {
         k: usize,
         max_mismatches: usize,
     ) -> Option<(usize, usize)> {
-        debug_assert!(subsequence_a_len >= k || subsequence_b_len >= k);
-        debug_assert!(subsequence_a_len >= k.saturating_sub(max_mismatches));
-        debug_assert!(subsequence_b_len >= k.saturating_sub(max_mismatches));
+        // If the DP matrix is too small to contain any valid anchor, there are no result cells.
+        if !(subsequence_a_len >= k || subsequence_b_len >= k)
+            || subsequence_a_len < k.saturating_sub(max_mismatches)
+            || subsequence_b_len < k.saturating_sub(max_mismatches)
+        {
+            return None;
+        }
 
         match self {
             Self::MaxMismatchesIsZero => {
